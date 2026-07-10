@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Notes — Your Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF8F3;
+    --paper-alt: #F2EEE3;
+    --ink: #2B2A28;
+    --ink-soft: #5B584F;
+    --rule: #D8D3C7;
+    --indigo: #2F3E63;
+    --rust: #A9633B;
+    --serif: 'Newsreader', Georgia, serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  a { color: var(--indigo); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover { border-bottom-color: var(--indigo); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 28px;
+    position: relative;
+  }
+
+  /* notebook binding rule down the left */
+  .wrap::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+
+  header.hero {
+    padding: 90px 0 60px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin: 0 0 18px;
+  }
+
+  h1.title {
+    font-size: 52px;
+    font-weight: 600;
+    margin: 0 0 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin: 0 0 26px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 22px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+  .nav a { color: var(--ink); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .nav a:hover { color: var(--indigo); border-bottom-color: var(--indigo); }
+
+  section { padding: 64px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 34px;
+  }
+
+  h2.section-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .section-count {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  p.lede { color: var(--ink-soft); max-width: 60ch; margin: -18px 0 30px; }
+
+  /* --- entries: shared log style --- */
+  .entry {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .entry:first-of-type { border-top: none; }
+
+  .entry .date {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding-top: 4px;
+  }
+
+  .entry .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    color: var(--indigo);
+    margin-bottom: 8px;
+  }
+
+  .entry h3 {
+    margin: 0 0 6px;
+    font-size: 21px;
+    font-weight: 600;
+  }
+
+  .entry p {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  /* --- projects / CV --- */
+  .project {
+    padding: 24px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .project:first-of-type { border-top: none; }
+
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .project h3 { margin: 0; font-size: 22px; }
+
+  .status {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .status.active { background: #E7ECF5; color: var(--indigo); }
+  .status.done { background: #EFE7DD; color: var(--rust); }
+
+  .project .meta {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 6px 0 10px;
+  }
+
+  .project p { margin: 8px 0 0; color: var(--ink-soft); }
+  .project .links { margin-top: 10px; font-family: var(--mono); font-size: 13px; }
+  .project .links a { margin-right: 16px; }
+
+  /* --- CV block --- */
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 10px 20px;
+    font-size: 16px;
+  }
+  .cv-grid dt {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    padding-top: 3px;
+  }
+  .cv-grid dd { margin: 0 0 4px; }
+
+  footer {
+    padding: 50px 0 90px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  footer a { color: var(--ink); border-bottom-color: var(--rule); }
+
+  @media (max-width: 560px) {
+    h1.title { font-size: 36px; }
+    .entry { grid-template-columns: 1fr; gap: 4px; }
+    body { font-size: 17px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Field Notes</p>
+    <h1 class="title">Your Name</h1>
+    <p class="subtitle">PhD researcher in [your field]. This is where I log what I'm building, what I'm reading, and things worth bookmarking.</p>
+    <nav class="nav">
+      <a href="#projects">Projects &amp; CV</a>
+      <a href="#blog">Blog</a>
+      <a href="#notes">Notes &amp; Finds</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- PROJECTS / CV -->
+  <section id="projects">
+    <div class="section-head">
+      <h2 class="section-title">Projects</h2>
+      <span class="section-count">03 active</span>
+    </div>
+    <p class="lede">The running list of what I'm working on for my PhD, roughly in order of how much coffee they've cost me.</p>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project Title One</h3>
+        <span class="status active">In progress</span>
+      </div>
+      <div class="meta">2025–present · Lab / Department name</div>
+      <p>One or two sentences on what this project is actually about, written so a smart non-specialist could follow it. What question are you answering?</p>
+      <div class="links">
+        <a href="#">Paper (draft)</a>
+        <a href="#">Code</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project Title Two</h3>
+        <span class="status active">In progress</span>
+      </div>
+      <div class="meta">2024–present · Collaboration with X</div>
+      <p>Short description of the second project — the problem, your approach, and where it currently stands.</p>
+      <div class="links">
+        <a href="#">Preprint</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project Title Three</h3>
+        <span class="status done">Published</span>
+      </div>
+      <div class="meta">2023 · Journal / Conference name</div>
+      <p>Description of a completed project, plus the outcome — published, presented, or shelved with lessons learned.</p>
+      <div class="links">
+        <a href="#">Published version</a>
+        <a href="#">Slides</a>
+      </div>
+    </div>
+
+    <div class="project" style="border-top:1px solid var(--rule); padding-top:38px; margin-top:10px;">
+      <h3 style="margin-bottom:18px;">CV summary</h3>
+      <dl class="cv-grid">
+        <dt>Education</dt>
+        <dd>PhD Candidate, [Field], [University] — [Start year]–present</dd>
+        <dd>MSc, [Field], [University] — [Year]</dd>
+
+        <dt>Publications</dt>
+        <dd>Full list on <a href="#">Google Scholar</a> / see Projects above.</dd>
+
+        <dt>Skills</dt>
+        <dd>Python, [your tools], [your methods]</dd>
+
+        <dt>Full CV</dt>
+        <dd><a href="#">Download PDF</a></dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section id="blog">
+    <div class="section-head">
+      <h2 class="section-title">Blog</h2>
+      <span class="section-count">longer posts</span>
+    </div>
+    <p class="lede">Longer write-ups — things I understood well enough to explain, or things I'm still working through.</p>
+
+    <div class="entry">
+      <div class="date">Jul&nbsp;2026</div>
+      <div>
+        <span class="tag">BLOG</span>
+        <h3><a href="#">A first post about something you actually care about</a></h3>
+        <p>A two-sentence teaser of what the post covers, written the way you'd describe it to a labmate over coffee.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="date">May&nbsp;2026</div>
+      <div>
+        <span class="tag">BLOG</span>
+        <h3><a href="#">Second post title</a></h3>
+        <p>Teaser text for the second post goes here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES / FINDS -->
+  <section id="notes">
+    <div class="section-head">
+      <h2 class="section-title">Notes &amp; Finds</h2>
+      <span class="section-count">short-form</span>
+    </div>
+    <p class="lede">Small things — an interesting site, a paper, a trick I learned — that don't need a whole blog post.</p>
+
+    <div class="entry">
+      <div class="date">Jul&nbsp;08</div>
+      <div>
+        <span class="tag">FIND</span>
+        <h3><a href="#">Name of an interesting website</a></h3>
+        <p>Why it's worth bookmarking, in one line.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="date">Jun&nbsp;30</div>
+      <div>
+        <span class="tag">TIL</span>
+        <h3>Something you learned this week</h3>
+        <p>A quick note on what it was and why it stuck with you.</p>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="date">Jun&nbsp;21</div>
+      <div>
+        <span class="tag">FIND</span>
+        <h3><a href="#">Another link worth keeping</a></h3>
+        <p>One line on what it is.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <p>your.email@university.edu &nbsp;·&nbsp; <a href="#">GitHub</a> &nbsp;·&nbsp; <a href="#">Google Scholar</a> &nbsp;·&nbsp; <a href="#">LinkedIn</a></p>
+    <p>Last updated July 2026.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
