@@ -6,6 +6,13 @@
 <title>Field Notes — Nishant Patel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var stored = localStorage.getItem('theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
 <style>
   :root {
     --paper: #FAF8F3;
@@ -15,12 +22,32 @@
     --rule: #D8D3C7;
     --indigo: #2F3E63;
     --rust: #A9633B;
+    --status-active-bg: #E7ECF5;
+    --status-done-bg: #EFE7DD;
     --serif: 'Newsreader', Georgia, serif;
     --mono: 'IBM Plex Mono', 'Courier New', monospace;
   }
 
+  :root[data-theme="dark"] {
+    --paper: #1B1A17;
+    --paper-alt: #242220;
+    --ink: #EDE9DF;
+    --ink-soft: #A8A296;
+    --rule: #3A3733;
+    --indigo: #8FA6D9;
+    --rust: #D68A5C;
+    --rust-solid: #D66D30;
+    --status-active-bg: rgba(143, 166, 217, 0.16);
+    --status-done-bg: rgba(214, 138, 92, 0.16);
+  }
+
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+
+  body, .wrap::before, .nav a, section, .entry, .tag, .project, .cv-grid dt, footer, footer a,
+  a, .status, .theme-toggle {
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  }
 
   body {
     margin: 0;
@@ -92,6 +119,55 @@
   }
   .nav a { color: var(--ink); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
   .nav a:hover { color: var(--indigo); border-bottom-color: var(--indigo); }
+
+  .theme-toggle {
+    --track-w: 54px;
+    --track-h: 28px;
+    --thumb: 22px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: var(--track-w);
+    height: var(--track-h);
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--paper-alt);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    line-height: 1;
+    color: var(--ink-soft);
+    transition: color 0.35s ease;
+  }
+  .theme-toggle .icon.sun { left: 6px; color: var(--ink); }
+  .theme-toggle .icon.moon { right: 6px; }
+
+  :root[data-theme="dark"] .theme-toggle .icon.sun { color: var(--ink-soft); }
+  :root[data-theme="dark"] .theme-toggle .icon.moon { color: var(--ink); }
+
+  .theme-toggle .thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: var(--thumb);
+    height: var(--thumb);
+    border-radius: 50%;
+    background: var(--indigo);
+    transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.35s ease;
+  }
+
+  :root[data-theme="dark"] .theme-toggle .thumb {
+    transform: translateX(calc(var(--track-w) - var(--thumb) - 6px));
+    background: var(--rust-solid);
+  }
 
   section { padding: 64px 0; border-bottom: 1px solid var(--rule); }
   section:last-of-type { border-bottom: none; }
@@ -184,8 +260,8 @@
     border-radius: 3px;
     white-space: nowrap;
   }
-  .status.active { background: #E7ECF5; color: var(--indigo); }
-  .status.done { background: #EFE7DD; color: var(--rust); }
+  .status.active { background: var(--status-active-bg); color: var(--indigo); }
+  .status.done { background: var(--status-done-bg); color: var(--rust); }
 
   .project .meta {
     font-family: var(--mono);
@@ -247,6 +323,11 @@
       <a href="#blog">Blog</a>
       <a href="#notes">Notes &amp; Finds</a>
       <a href="#contact">Contact</a>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <span class="icon sun">☀</span>
+        <span class="icon moon">☾</span>
+        <span class="thumb"></span>
+      </button>
     </nav>
   </header>
 
@@ -351,11 +432,11 @@
     <p class="lede">Small things — an interesting site, a paper, a trick I learned — that don't need a whole blog post.</p>
 
     <div class="entry">
-      <div class="date">Jul&nbsp;08</div>
+      <div class="date">Jul&nbsp;29</div>
       <div>
         <span class="tag">FIND</span>
-        <h3><a href="#">Name of an interesting website</a></h3>
-        <p>Why it's worth bookmarking, in one line.</p>
+        <h3><a href="https://www.thedaily-nomad.com/">The Daily Nomad</a></h3>
+        <p>Found this while trying to actually read Swedish news without a dictionary open in another tab. Translates real articles and levels them to where you're at.</p>
       </div>
     </div>
 
@@ -384,6 +465,28 @@
   </footer>
 
 </div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+
+    function render() {
+      var isDark = root.getAttribute('data-theme') === 'dark';
+      btn.setAttribute('aria-pressed', isDark);
+      btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    btn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      render();
+    });
+
+    render();
+  })();
+</script>
 
 </body>
 </html>
