@@ -22,6 +22,7 @@
     --rule: #D8D3C7;
     --indigo: #2F3E63;
     --rust: #A9633B;
+    --sage: #5E7350;
     --status-active-bg: #E7ECF5;
     --status-done-bg: #EFE7DD;
     --serif: 'Newsreader', Georgia, serif;
@@ -37,6 +38,7 @@
     --indigo: #8FA6D9;
     --rust: #D68A5C;
     --rust-solid: #D66D30;
+    --sage: #97AD82;
     --status-active-bg: rgba(143, 166, 217, 0.16);
     --status-done-bg: rgba(214, 138, 92, 0.16);
   }
@@ -169,8 +171,21 @@
     background: var(--rust-solid);
   }
 
-  section { padding: 64px 0; border-bottom: 1px solid var(--rule); }
+  section { position: relative; padding: 64px 0; border-bottom: 1px solid var(--rule); }
   section:last-of-type { border-bottom: none; }
+
+  .section-tab {
+    position: absolute;
+    left: -27px;
+    top: 68px;
+    width: 20px;
+    height: 4px;
+    border-radius: 0 3px 3px 0;
+    transition: background-color 0.35s ease;
+  }
+  .section-tab.accent-rust { background: var(--rust); }
+  .section-tab.accent-indigo { background: var(--indigo); }
+  .section-tab.accent-sage { background: var(--sage); }
 
   .section-head {
     display: flex;
@@ -275,21 +290,33 @@
   .project .links a { margin-right: 16px; }
 
   /* --- CV block --- */
-  .cv-grid {
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 10px 20px;
+  .cv-section {
+    padding: 22px 0;
+    border-top: 1px solid var(--rule);
     font-size: 16px;
   }
-  .cv-grid dt {
+  .cv-section:first-of-type { border-top: none; padding-top: 0; }
+
+  .cv-heading {
     font-family: var(--mono);
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--ink-soft);
-    padding-top: 3px;
+    margin: 0 0 14px;
   }
-  .cv-grid dd { margin: 0 0 4px; }
+
+  .cv-section p { margin: 0; }
+
+  .cv-edu { margin: 0 0 14px; display: flex; flex-direction: column; gap: 3px; }
+  .cv-edu:last-of-type { margin-bottom: 0; }
+  .cv-edu-title { color: var(--ink); }
+  .cv-edu-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
 
   footer {
     padding: 50px 0 90px;
@@ -317,7 +344,7 @@
   <header class="hero">
     <p class="eyebrow">Field Notes</p>
     <h1 class="title">Nishant Patel</h1>
-    <p class="subtitle">PhD researcher in [your field]. This is where I log what I'm building, what I'm reading, and things worth bookmarking.</p>
+    <p class="subtitle">PhD researcher in Physics. This is where I log what I'm building, what I'm reading, and things worth bookmarking.</p>
     <nav class="nav">
       <a href="#projects">Projects &amp; CV</a>
       <a href="#blog">Blog</a>
@@ -333,6 +360,7 @@
 
   <!-- PROJECTS / CV -->
   <section id="projects">
+    <span class="section-tab accent-rust"></span>
     <div class="section-head">
       <h2 class="section-title">Projects</h2>
       <span class="section-count">03 active</span>
@@ -379,25 +407,47 @@
 
     <div class="project" style="border-top:1px solid var(--rule); padding-top:38px; margin-top:10px;">
       <h3 style="margin-bottom:18px;">CV summary</h3>
-      <dl class="cv-grid">
-        <dt>Education</dt>
-        <dd>PhD Candidate, [Field], [University] — [Start year]–present</dd>
-        <dd>MSc, [Field], [University] — [Year]</dd>
 
-        <dt>Publications</dt>
-        <dd>Full list on <a href="#">Google Scholar</a> / see Projects above.</dd>
+      <div class="cv-section">
+        <h4 class="cv-heading">Education</h4>
+        <div class="cv-edu">
+          <span class="cv-edu-title">PhD Candidate, Physics (Marie Skłodowska-Curie COFUND Fellow, PRISMAS)</span>
+          <span class="cv-edu-meta">Lund University &middot; Apr 2024-present</span>
+        </div>
+        <div class="cv-edu">
+          <span class="cv-edu-title">MSc, Material Science (double degree)</span>
+          <span class="cv-edu-meta">Università di Torino &amp; Université de Montpellier &middot; 2021-2023</span>
+        </div>
+        <div class="cv-edu">
+          <span class="cv-edu-title">MSc, Chemistry</span>
+          <span class="cv-edu-meta">National Institute of Technology Tiruchirappalli &middot; 2019-2021</span>
+        </div>
+        <div class="cv-edu">
+          <span class="cv-edu-title">BSc, Chemistry</span>
+          <span class="cv-edu-meta">University of Mumbai &middot; 2016-2019</span>
+        </div>
+      </div>
 
-        <dt>Skills</dt>
-        <dd>Python, [your tools], [your methods]</dd>
+      <div class="cv-section">
+        <h4 class="cv-heading">Publications</h4>
+        <p>Full list on <a href="#">Google Scholar</a> / see Projects above.</p>
+      </div>
 
-        <dt>Full CV</dt>
-        <dd><a href="#">Download PDF</a></dd>
-      </dl>
+      <div class="cv-section">
+        <h4 class="cv-heading">Skills</h4>
+        <p>Python, [your tools], [your methods]</p>
+      </div>
+
+      <div class="cv-section">
+        <h4 class="cv-heading">Full CV</h4>
+        <p><a href="#">Download PDF</a></p>
+      </div>
     </div>
   </section>
 
   <!-- BLOG -->
   <section id="blog">
+    <span class="section-tab accent-indigo"></span>
     <div class="section-head">
       <h2 class="section-title">Blog</h2>
       <span class="section-count">longer posts</span>
@@ -425,6 +475,7 @@
 
   <!-- NOTES / FINDS -->
   <section id="notes">
+    <span class="section-tab accent-sage"></span>
     <div class="section-head">
       <h2 class="section-title">Notes &amp; Finds</h2>
       <span class="section-count">short-form</span>
