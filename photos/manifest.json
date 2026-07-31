@@ -1,0 +1,17 @@
+[
+  {
+    "id": "test-sample",
+    "thumb": "photos/web/test-sample-thumb.jpg",
+    "full": "photos/web/test-sample-full.jpg",
+    "camera": "FUJIFILM X-T5",
+    "lens": "XF 35mm F1.4 R",
+    "focalLength": "35mm",
+    "aperture": "f/1.4",
+    "shutter": "1/250s",
+    "iso": 200,
+    "date": "2026-06-12 17:42:00",
+    "lat": 55.7047,
+    "lon": 13.191,
+    "mapUrl": "https://www.openstreetmap.org/?mlat=55.7047&mlon=13.191#map=14/55.7047/13.191"
+  }
+]

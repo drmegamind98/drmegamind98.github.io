@@ -23,6 +23,7 @@
     --indigo: #2F3E63;
     --rust: #A9633B;
     --sage: #5E7350;
+    --gold: #B8863B;
     --status-active-bg: #E7ECF5;
     --status-done-bg: #EFE7DD;
     --serif: 'Newsreader', Georgia, serif;
@@ -39,6 +40,7 @@
     --rust: #D68A5C;
     --rust-solid: #D66D30;
     --sage: #97AD82;
+    --gold: #D9A662;
     --status-active-bg: rgba(143, 166, 217, 0.16);
     --status-done-bg: rgba(214, 138, 92, 0.16);
   }
@@ -171,8 +173,22 @@
     background: var(--rust-solid);
   }
 
-  section { position: relative; padding: 64px 0; border-bottom: 1px solid var(--rule); }
+  section { position: relative; padding: 64px 0; border-bottom: 1px solid var(--rule); overflow: hidden; }
   section:last-of-type { border-bottom: none; }
+
+  .section-pattern {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    opacity: 0.42;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 12%, transparent 68%);
+    mask-image: linear-gradient(to bottom, black 0%, black 12%, transparent 68%);
+  }
 
   .section-tab {
     position: absolute;
@@ -186,6 +202,7 @@
   .section-tab.accent-rust { background: var(--rust); }
   .section-tab.accent-indigo { background: var(--indigo); }
   .section-tab.accent-sage { background: var(--sage); }
+  .section-tab.accent-gold { background: var(--gold); }
 
   .section-head {
     display: flex;
@@ -326,6 +343,107 @@
   }
   footer a { color: var(--ink); border-bottom-color: var(--rule); }
 
+  /* --- Photos: filmstrip + lightbox --- */
+  .filmstrip {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 4px 4px 14px 4px;
+    margin: 0 -4px;
+    scroll-snap-type: x proximity;
+  }
+  .filmstrip::-webkit-scrollbar { height: 6px; }
+  .filmstrip::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+  .film-thumb {
+    flex: 0 0 auto;
+    width: 220px;
+    height: 150px;
+    padding: 0;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--paper-alt);
+    scroll-snap-align: start;
+  }
+  .film-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .film-thumb:hover img { transform: scale(1.05); }
+
+  .photos-empty {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 9, 8, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    z-index: 1000;
+  }
+  .lightbox[hidden] { display: none; }
+
+  .lightbox-inner {
+    max-width: 1080px;
+    max-height: 88vh;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+  .lightbox-inner img {
+    max-width: 100%;
+    max-height: 78vh;
+    border-radius: 4px;
+    display: block;
+    flex: 1 1 480px;
+  }
+
+  .exif-panel {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #EDE9DF;
+    min-width: 200px;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  .exif-panel dt {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 11px;
+    color: #A8A296;
+    margin: 14px 0 0;
+  }
+  .exif-panel dt:first-child { margin-top: 0; }
+  .exif-panel dd { margin: 3px 0 0; }
+  .exif-panel a { color: #D68A5C; border-bottom: 1px solid rgba(214,138,92,0.4); }
+
+  .lightbox-close, .lightbox-nav {
+    position: fixed;
+    background: none;
+    border: none;
+    color: #EDE9DF;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 10px;
+  }
+  .lightbox-close { top: 14px; right: 18px; }
+  .lightbox-nav.prev { left: 14px; top: 50%; transform: translateY(-50%); }
+  .lightbox-nav.next { right: 14px; top: 50%; transform: translateY(-50%); }
+
   @media (max-width: 560px) {
     h1.title { font-size: 36px; }
     .entry { grid-template-columns: 1fr; gap: 4px; }
@@ -349,6 +467,7 @@
       <a href="#projects">Projects &amp; CV</a>
       <a href="#blog">Blog</a>
       <a href="#notes">Notes &amp; Finds</a>
+      <a href="#photos">Photos</a>
       <a href="#contact">Contact</a>
       <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
         <span class="icon sun">☀</span>
@@ -360,6 +479,7 @@
 
   <!-- PROJECTS / CV -->
   <section id="projects">
+    <img class="section-pattern" src="assets/patterns/projects.svg" alt="" aria-hidden="true">
     <span class="section-tab accent-rust"></span>
     <div class="section-head">
       <h2 class="section-title">Projects</h2>
@@ -447,6 +567,7 @@
 
   <!-- BLOG -->
   <section id="blog">
+    <img class="section-pattern" src="assets/patterns/blog.svg" alt="" aria-hidden="true">
     <span class="section-tab accent-indigo"></span>
     <div class="section-head">
       <h2 class="section-title">Blog</h2>
@@ -475,6 +596,7 @@
 
   <!-- NOTES / FINDS -->
   <section id="notes">
+    <img class="section-pattern" src="assets/patterns/notes.svg" alt="" aria-hidden="true">
     <span class="section-tab accent-sage"></span>
     <div class="section-head">
       <h2 class="section-title">Notes &amp; Finds</h2>
@@ -510,11 +632,34 @@
     </div>
   </section>
 
+  <!-- PHOTOS -->
+  <section id="photos">
+    <img class="section-pattern" src="assets/patterns/photos.svg" alt="" aria-hidden="true">
+    <span class="section-tab accent-gold"></span>
+    <div class="section-head">
+      <h2 class="section-title">Photos</h2>
+      <span class="section-count" id="photo-count">loading&hellip;</span>
+    </div>
+    <p class="lede">Photos I've taken along the way, kept mostly as an excuse to buy more lenses. Click one and it'll happily overshare: camera, settings, and where in the world it was taken.</p>
+
+    <div class="filmstrip" id="filmstrip"></div>
+  </section>
+
   <footer id="contact">
     <p><a href="mailto:nishant.patel@fysik.lu.se">nishant.patel@fysik.lu.se</a> (work) &nbsp;·&nbsp; <a href="mailto:Patel.nishant1998@gmail.com">Patel.nishant1998@gmail.com</a> (personal) &nbsp;·&nbsp; <a href="#">GitHub</a> &nbsp;·&nbsp; <a href="#">Google Scholar</a> &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/nishant-patel-08/">LinkedIn</a></p>
     <p>Last updated July 2026.</p>
   </footer>
 
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <button type="button" class="lightbox-nav prev" id="lightbox-prev" aria-label="Previous photo">&#8592;</button>
+  <button type="button" class="lightbox-nav next" id="lightbox-next" aria-label="Next photo">&#8594;</button>
+  <div class="lightbox-inner">
+    <img id="lightbox-img" src="" alt="">
+    <dl class="exif-panel" id="exif-panel"></dl>
+  </div>
 </div>
 
 <script>
@@ -536,6 +681,96 @@
     });
 
     render();
+  })();
+</script>
+
+<script>
+  (function () {
+    var filmstrip = document.getElementById('filmstrip');
+    var countEl = document.getElementById('photo-count');
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+    var exifPanel = document.getElementById('exif-panel');
+    var closeBtn = document.getElementById('lightbox-close');
+    var prevBtn = document.getElementById('lightbox-prev');
+    var nextBtn = document.getElementById('lightbox-next');
+    var photos = [];
+    var currentIndex = 0;
+
+    function exifRow(label, value) {
+      if (!value) return '';
+      return '<dt>' + label + '</dt><dd>' + value + '</dd>';
+    }
+
+    function openLightbox(index) {
+      currentIndex = index;
+      var p = photos[index];
+      lightboxImg.src = p.full;
+      lightboxImg.alt = p.id;
+
+      var settings = [p.focalLength, p.aperture, p.shutter, p.iso ? 'ISO ' + p.iso : null]
+        .filter(Boolean).join(' &middot; ');
+
+      var rows = '';
+      rows += exifRow('Camera', p.camera);
+      rows += exifRow('Lens', p.lens);
+      rows += exifRow('Settings', settings);
+      rows += exifRow('Date', p.date);
+      if (p.mapUrl && p.lat != null && p.lon != null) {
+        rows += exifRow('Location', '<a href="' + p.mapUrl + '" target="_blank" rel="noopener">' +
+          p.lat.toFixed(3) + ', ' + p.lon.toFixed(3) + ' &mdash; view on map</a>');
+      }
+      exifPanel.innerHTML = rows;
+      lightbox.hidden = false;
+    }
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      lightboxImg.src = '';
+    }
+
+    function showRelative(delta) {
+      if (!photos.length) return;
+      openLightbox((currentIndex + delta + photos.length) % photos.length);
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', function () { showRelative(-1); });
+    nextBtn.addEventListener('click', function () { showRelative(1); });
+    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', function (e) {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showRelative(-1);
+      if (e.key === 'ArrowRight') showRelative(1);
+    });
+
+    fetch('photos/manifest.json')
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (data) {
+        photos = data;
+        if (!photos.length) {
+          countEl.textContent = 'none yet';
+          return;
+        }
+        countEl.textContent = photos.length + (photos.length === 1 ? ' shot' : ' shots');
+        photos.forEach(function (p, i) {
+          var thumbBtn = document.createElement('button');
+          thumbBtn.type = 'button';
+          thumbBtn.className = 'film-thumb';
+          thumbBtn.setAttribute('aria-label', 'Open photo ' + (i + 1) + ' of ' + photos.length);
+          var img = document.createElement('img');
+          img.src = p.thumb;
+          img.alt = p.id;
+          img.loading = 'lazy';
+          thumbBtn.appendChild(img);
+          thumbBtn.addEventListener('click', function () { openLightbox(i); });
+          filmstrip.appendChild(thumbBtn);
+        });
+      })
+      .catch(function () {
+        countEl.textContent = 'unavailable';
+      });
   })();
 </script>
 
